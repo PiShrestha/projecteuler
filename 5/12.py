@@ -1,8 +1,11 @@
 import math
 from functools import reduce
 
-prime_numbers = set()
-upper_bound = 80
+def find_prime_numbers(upper_bound: int) -> set:
+    answer = set()
+    for num in range(1, upper_bound + 1):
+        if isPrime(num): answer.add(num)
+    return answer
 
 def isPrime(num: int) -> bool:
     if num <= 1:
@@ -11,7 +14,7 @@ def isPrime(num: int) -> bool:
     if num <= 3:
         return True
     
-    if num % 2 == 0:
+    if num %2 == 0:
         return False
 
     for divisor in range(3, int(math.sqrt(num)) + 1, 2):
@@ -19,14 +22,6 @@ def isPrime(num: int) -> bool:
             return False
         
     return True
-
-def find_prime_numbers(upper_bound: int) -> set:
-    answer = set()
-    for num in range(1, upper_bound + 1):
-        if isPrime(num): answer.add(num)
-    return answer
-
-prime_numbers = find_prime_numbers(upper_bound)
 
 def find_all_prime_factors(num: int) -> dict:
     '''
@@ -56,44 +51,38 @@ def find_all_prime_factors(num: int) -> dict:
     
     return factors
 
-highest_num_factors = {}
+# C(n,k) = (n!)/(k!(n-k)!) ->
+# 10164 -> 2 + 1 + 1 + 2 + 4!/(2!*2!) = 6 + 12 = 18 
+# print(find_all_prime_factors(2*2*3*7*11*11))
 
-for num in range(2, upper_bound + 1):
-    prime_factors = find_all_prime_factors(num)
-    for factor, freq in prime_factors.items():
-        highest_num_factors[factor] = max(highest_num_factors.get(factor, freq), freq)
+n = 100
+# TOO LONG (need to check whether this works or not)
+# while 1:
+#     triangle_num = int(n*(n-1)/2)
+#     factors = find_all_prime_factors(triangle_num)
+#     divisor_with_same_prime = reduce(lambda x, y: x + y, 
+#                                      map(lambda kv : kv[1], factors.items()))
+#     num_unique_factors = len(factors)
+#     num_divisors = 2 + math.factorial(num_unique_factors) / (2 * math.factorial(num_unique_factors - 2)) + divisor_with_same_prime
+#     print(num_divisors)
+
+#     if num_divisors > 500:
+#         print(triangle_num)
+#         break
     
-answer = reduce(
-    lambda x, y: x * y,
-    map(lambda kv: kv[0] ** kv[1], highest_num_factors.items())
-)
+#     n += 1
 
-print(highest_num_factors)
-print(answer)
-
-
-# Efficient answer using arithmetic
-pn = find_prime_numbers(upper_bound)
-product = reduce(lambda x, y : x * y, pn)
-
-for n in pn:
-    exp = int(math.log(upper_bound, n)) - 1
-    if exp == 0:
+while 1:
+    triangle_num = int(n*(n-1)/2)
+    num_divisors = 0
+    for i in range(1, int(math.sqrt(triangle_num) + 1)):
+        if triangle_num % i == 0:
+            num_divisors += 1
+    
+    print(num_divisors)
+    if num_divisors > 250:
         break
-    product *= (n ** exp)
 
-print(product)
+    n += 1
 
-
-# using LCM and GCD
-
-def lcm(a, b):
-    return a * b // math.gcd(a, b)
-
-result = 1
-
-for i in range(1, 21):
-    result = lcm(result, i)
-    print(result)
-
-print(result)
+print(triangle_num)
