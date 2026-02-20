@@ -5,7 +5,7 @@ print(7 * math.factorial(9)) # 2540160
 print(8 * math.factorial(9)) # 2903040
 # any 8 or more digits number > max possible sum (9!)
 
-# Precompute factorials
+# Precompute factorials (faster compute)
 digit_fact = [math.factorial(i) for i in range(10)]
 
 # Upper bound = 7 * 9!
