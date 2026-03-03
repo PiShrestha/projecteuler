@@ -1,10 +1,31 @@
 import math
 
-divisor = math.pow(10, 10)
-first_ten = 10405071317 % divisor
-total = first_ten
+# euclidean algorithm
+def gcd(a: int, b: int):
+    if a % b == 0 or b % a == 0:
+        return min(a, b)
+    
+    c = max(a, b)
+    d = min(a, b)
 
-for i in range(11, 1001):
-    total += math.pow(i, i) % divisor
+    while (c % d != 0):
+        remainder = c % d
+        c = d
+        d = remainder
 
-print(total % divisor)
+    return d 
+
+def remainder(base:int, exponent:int, divisor: int):
+    num = base
+
+    for i in range(1, exponent):
+        num *= base
+        num = num % divisor
+
+    return num
+
+sum = 0
+for num in range(1, 1001):
+    sum += remainder(num, num, int(math.pow(10,10)))
+
+print(sum % math.pow(10,10))
